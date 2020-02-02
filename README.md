@@ -1,6 +1,5 @@
 # Resilient Observer
-This repository is for a recently submitted paper for [IEEE CCTA 2020](https://ccta2020.ieeecss.org/)
-IEEE 4th IEEE Conference on Control Technology and Applications
+This repository is for a recently submitted paper for IEEE 4th IEEE Conference on Control Technology and Applications [IEEE CCTA 2020](https://ccta2020.ieeecss.org/)
 
 
 ## Abstract
