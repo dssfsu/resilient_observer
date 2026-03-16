@@ -29,59 +29,124 @@ figure(2) % Unconstrained l_1 based minimization
 figure(3) % Multimodel
 
 LW = 1.3;  % linewidth
-FS = 10;   % font size
-for iter = 1:n_delta
-    
+FS = 15;   % font size
+
+if n_delta > 5
+    % Plot all angles together
+
+    time_select_mask = time_vec >= T_start_opt; % ignoring the optimizer idle time
+
     % Luenberger
     figure(1)
-    subplot(5,2,2*(iter-1)+1)
-    plot(time_vec,x(:,iter),'k','LineWidth',LW)
-    ylabel(['\delta_{' num2str(iter) '}'],'FontWeight','bold')
-    if(iter == 1)
-        title('Actual')
-    end
-    
-    subplot(5,2,2*iter)
-    plot(time_vec,x_hat_LO(:,iter),'k','LineWidth',LW)
-    ylabel(['\delta_{' num2str(iter) '}'],'FontWeight','bold')
-    
-    if(iter == 1)
-        title('Luenberger Observer')
-    end
-    
-     % L1 unconstrained
-    figure(2)
-    subplot(5,2,2*(iter-1)+1)
-    plot(time_vec,x(:,iter),'k','LineWidth',LW)
-    ylabel(['\delta_{' num2str(iter) '}'],'FontWeight','bold')
-    if(iter == 1)
-        title('Actual')
-    end
-    
-    subplot(5,2,2*iter)
-    plot(time_vec,x_hat_L1O(:,iter),'k','LineWidth',LW)
-    ylabel(['\delta_{' num2str(iter) '}'],'FontWeight','bold')
-    if(iter == 1)
-        title('Unconstrained l_1-based Observer')
-    end
+    subplot(3,1,1)
+    plot(time_vec,x,'LineWidth',LW)
+    ylabel('\delta','FontWeight','bold')
+    title('Actual Angles')
 
-    
-     % MMO
+    subplot(3,1,2)
+    plot(time_vec,x_hat_LO,'LineWidth',LW)
+    ylabel('\delta_{est}','FontWeight','bold')
+    title('Estimated Angles')
+
+    subplot(3,1,3)
+    plot(time_vec,(x - x_hat_LO).*time_select_mask,'LineWidth',LW)
+    ylabel('\delta - \delta_{est}','FontWeight','bold')
+    title('Estimation Error') 
+    sgtitle('Luenberger Observer')
+
+    % L1 unconstrained
+    figure(2)
+    subplot(3,1,1)
+    plot(time_vec,x,'LineWidth',LW)
+    ylabel('\delta','FontWeight','bold')
+    title('Actual Angles')
+
+    subplot(3,1,2)
+    plot(time_vec,x_hat_L1O,'LineWidth',LW)
+    ylabel('\delta_{est}','FontWeight','bold')
+    title('Estimated Angles')
+
+    subplot(3,1,3)
+    plot(time_vec,(x - x_hat_L1O).*time_select_mask,'LineWidth',LW)
+    ylabel('\delta - \delta_{est}','FontWeight','bold')
+    title('Estimation Error') 
+    sgtitle('Unconstrained L1 Observer')
+
+    % MMO
     figure(3)
-    subplot(5,2,2*(iter-1)+1)
-    plot(time_vec,x(:,iter),'k','LineWidth',LW)
-    ylabel(['\delta_{' num2str(iter) '}'],'FontWeight','bold')
-    if(iter == 1)
-        title('Actual')
+    subplot(3,1,1)
+    plot(time_vec,x,'LineWidth',LW)
+    ylabel('\delta','FontWeight','bold')
+    title('Actual Angles')
+
+    subplot(3,1,2)
+    plot(time_vec,x_hat_MMO,'LineWidth',LW)
+    ylabel('\delta_{est}','FontWeight','bold')
+    title('Estimated Angles')
+
+    subplot(3,1,3)
+    plot(time_vec,(x - x_hat_MMO).*time_select_mask,'LineWidth',LW)
+    ylabel('\delta - \delta_{est}','FontWeight','bold')
+    title('Estimation Error') 
+    sgtitle('Multi-Model Observer')
+
+
+
+else
+    % Plot all angles separately
+    for iter = 1:n_delta
+
+        % Luenberger
+        figure(1)
+        subplot(n_delta,2,2*(iter-1)+1)
+        plot(time_vec,x(:,iter),'k','LineWidth',LW)
+        ylabel(['\delta_{' num2str(iter) '}'],'FontWeight','bold')
+        if(iter == 1)
+            title('Actual')
+        end
+
+        subplot(n_delta,2,2*iter)
+        plot(time_vec,x_hat_LO(:,iter),'k','LineWidth',LW)
+        ylabel(['\delta_{' num2str(iter) '}'],'FontWeight','bold')
+
+        if(iter == 1)
+            title('Luenberger Observer')
+        end
+
+        % L1 unconstrained
+        figure(2)
+        subplot(n_delta,2,2*(iter-1)+1)
+        plot(time_vec,x(:,iter),'k','LineWidth',LW)
+        ylabel(['\delta_{' num2str(iter) '}'],'FontWeight','bold')
+        if(iter == 1)
+            title('Actual')
+        end
+
+        subplot(n_delta,2,2*iter)
+        plot(time_vec,x_hat_L1O(:,iter),'k','LineWidth',LW)
+        ylabel(['\delta_{' num2str(iter) '}'],'FontWeight','bold')
+        if(iter == 1)
+            title('Unconstrained l_1-based Observer')
+        end
+
+
+        % MMO
+        figure(3)
+        subplot(n_delta,2,2*(iter-1)+1)
+        plot(time_vec,x(:,iter),'k','LineWidth',LW)
+        ylabel(['\delta_{' num2str(iter) '}'],'FontWeight','bold')
+        if(iter == 1)
+            title('Actual')
+        end
+
+        subplot(n_delta,2,2*iter)
+        plot(time_vec,x_hat_MMO(:,iter),'k','LineWidth',LW)
+        ylabel(['\delta_{' num2str(iter) '}'],'FontWeight','bold')
+        if(iter == 1)
+            title('Multi-Model Observer')
+        end
+
     end
-    
-    subplot(5,2,2*iter)
-    plot(time_vec,x_hat_MMO(:,iter),'k','LineWidth',LW)
-    ylabel(['\delta_{' num2str(iter) '}'],'FontWeight','bold')
-    if(iter == 1)
-        title('Multi-Model Observer')
-    end
-    
 end
 
 %% BDD_res
